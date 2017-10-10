@@ -8,7 +8,7 @@ import {API_CONFIG} from '../../config';
 const Home = props => (
   <ContentContainer>
     <p className="App-intro">
-      Choose from either of Bitcoins public blockchains below:
+      Choose a Bitcoin blockchain below:
     </p>
     <BlockChainOptions history={props.history} />
   </ContentContainer>

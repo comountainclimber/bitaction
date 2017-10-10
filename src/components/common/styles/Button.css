@@ -24,3 +24,8 @@ button:focus {outline:0;}
   color: white;
   background-color: rgb(68, 156, 250);
 }
+
+.Button-primary:hover {
+  color: white;
+  background-color: rgb(68, 156, 250);
+}

@@ -1,7 +1,10 @@
 .Navigation-logo {
-  /*animation: Navigation-logo-spin infinite 20s linear;*/
   height: 80px;
   cursor: pointer;
+}
+
+.Navigation-logo:hover {
+  animation: Navigation-logo-spin infinite 20s linear;
 }
 
 .Navigation-header {
@@ -20,3 +23,7 @@
   font-size: large;
 }
 
+@keyframes Navigation-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

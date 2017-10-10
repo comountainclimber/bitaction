@@ -9,7 +9,7 @@ import './styles/App.css';
 
 import RouteNotFound from './components/router/RouteNotFound';
 import Home from './components/home/Home';
-import WalletContainer from './components/wallet/WalletContainer';
+import AddressContainer from './components/address/AddressContainer';
 import Navigation from './components/navigation/Navigation';
 import Footer from './components/navigation/Footer';
 import history from './history';
@@ -25,12 +25,12 @@ const App = () => (
           <Route
             exact
             path={API_CONFIG.MAIN_NET.internalUrl}
-            render={() => <WalletContainer config={API_CONFIG.MAIN_NET} />}
+            render={() => <AddressContainer config={API_CONFIG.MAIN_NET} />}
           />
           <Route
             exact
             path={API_CONFIG.TEST_NET.internalUrl}
-            render={() => <WalletContainer config={API_CONFIG.TEST_NET} />}
+            render={() => <AddressContainer config={API_CONFIG.TEST_NET} />}
           />
           <Route component={RouteNotFound} />
         </Switch>
