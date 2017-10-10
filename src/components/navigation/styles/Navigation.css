@@ -1,0 +1,22 @@
+.Navigation-logo {
+  /*animation: Navigation-logo-spin infinite 20s linear;*/
+  height: 80px;
+  cursor: pointer;
+}
+
+.Navigation-header {
+  background-color: #222;
+  padding: 20px;
+  color: white;
+}
+
+.Navigation-title {
+  font-size: 1.5em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.Navigation-intro {
+  font-size: large;
+}
+
