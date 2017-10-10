@@ -21,8 +21,6 @@ module.exports = {
         "no-plusplus": [0],
         "no-underscore-dangle": [0],
         "comma-dangle": [0],
-        // in react-native we purposefully exclude file extensions from our import statements
-        "import/extensions": [0],
         "max-len": ["warn", 100],
         "consistent-return": "warn",
         "object-curly-spacing": [0],
@@ -33,16 +31,11 @@ module.exports = {
         "no-use-before-define": [0],
         "no-unused-vars": ["error", {"varsIgnorePattern": "React", "args": "none" }],
         "semi": [ "error", "always"],
-        // do not require validation of props
         "react/prop-types": "warn",
-        // throw an error for unused imports of react components
         "react/jsx-uses-vars": 1,
-        // throw error if writing JSX without requiring React
         "react/react-in-jsx-scope": 1,
-        // allow files with .js and .jsx to contain jsx
         "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
         "react/display-name": 1,
-        // double quotes jsx
         "jsx-quotes": ["error", "prefer-double"],
         "react/jsx-space-before-closing": 1,
         "react/jsx-indent": [1, 2],
