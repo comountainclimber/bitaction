@@ -5,6 +5,7 @@
     "type": "git",
     "url": "git+https://github.com/comountainclimber/bitcoin-transactions.git"
   },
+  "homepage": "https://comountainclimber.github.io/bitaction",
   "author": "Maxwell Lasky",
   "dependencies": {
     "eslint-plugin-react": "^7.1.0",
