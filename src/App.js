@@ -17,26 +17,26 @@ import {API_CONFIG} from './config';
 
 const App = () => (
   <div className="App">
-    <Navigation handleClick={() => history.push('/')} />
-    <div className="App-container">
-      <Router history={history}>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route
-            exact
-            path={API_CONFIG.MAIN_NET.internalUrl}
-            render={() => <AddressContainer config={API_CONFIG.MAIN_NET} />}
-          />
-          <Route
-            exact
-            path={API_CONFIG.TEST_NET.internalUrl}
-            render={() => <AddressContainer config={API_CONFIG.TEST_NET} />}
-          />
-          <Route component={RouteNotFound} />
-        </Switch>
-      </Router>
-    </div>
-    <Footer />
+      <Navigation handleClick={() => history.push('/')} />
+      <div className="App-container">
+        <Router history={history}>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route
+              exact
+              path={API_CONFIG.MAIN_NET.internalUrl}
+              render={() => <AddressContainer config={API_CONFIG.MAIN_NET} />}
+            />
+            <Route
+              exact
+              path={API_CONFIG.TEST_NET.internalUrl}
+              render={() => <AddressContainer config={API_CONFIG.TEST_NET} />}
+            />
+            <Route component={RouteNotFound} />
+          </Switch>
+        </Router>
+      </div>
+      <Footer />
   </div>
 );
 

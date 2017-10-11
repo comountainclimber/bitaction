@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import bitcoinIcon from '../../images/bitcoin-icon.png';
 
 import './styles/Navigation.css';
+import ExchangePriceData from '../../ExchangePriceData';
 
-export default class Home extends Component {
+
+export default class Navigation extends Component {
   render() {
     return (
       <div className="Navigation">
@@ -16,6 +18,7 @@ export default class Home extends Component {
             View wallet transactions in real time on both MainNet and TestNet.
           </p>
         </header>
+        <ExchangePriceData render={(state) => <div> {JSON.stringify(state)} </div>} />
       </div>
     );
   }
