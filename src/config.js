@@ -12,12 +12,14 @@ export const API_CONFIG = {
     id: 'TEST_NET',
     display: 'Testnet',
     internalUrl: '/testnet',
+    webSocketUrl: 'https://testnet.blockexplorer.com/',
     dataSource: 'https://testnet.blockexplorer.com/api'
   },
   MAIN_NET: {
     id: 'MAIN_NET',
     display: 'Mainnet',
     internalUrl: '/mainnet',
+    webSocketUrl: 'https://blockexplorer.com',
     dataSource: 'https://blockexplorer.com/api'
   },
 };
