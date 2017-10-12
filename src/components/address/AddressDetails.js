@@ -103,7 +103,7 @@ const TransactionParser = (props) => {
     }
   });
   return (
-    <div key={transactionID} style={{display: 'flex', flexDirection: 'column'}}>
+    <div key={transactionID} style={{display: 'flex', flexDirection: 'column', margin: 5}}>
       {debits}
       {credits}
       <a style={{fontSize: 10}} disabled> {transactionID} </a>

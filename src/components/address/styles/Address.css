@@ -19,38 +19,38 @@
   height: 90px
 }
 
-.UnknownAddress-message {
-  font-size: 14;
-  font-weight: '300';
-  margin-left: 15;
-  color: '#F44336'
+.UnknownAddress {
+  font-size: 14px;
+  font-weight: 300;
+  margin-left: 15px;
+  color: #F44336
 }
 
 .Pending-message {
-  font-size: 14;
-  font-weight: '300';
-  margin-left: 15;
-  color: 'green'
+  font-size: 14px;
+  font-weight: 300;
+  margin-left: 15px;
+  color: green
 }
 
 .AddressDetails-qr-code-container {
-  display: 'flex';
-  flex-direction: 'column';
-  align-items: 'center';
-  margin-top: 10;
-  margin-bottom: 10
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px
 }
 
 .AddressDetails-debit-row {
-  color: 'red';
-  display: 'flex';
-  flex-direction: 'row';
-  justify-content: 'space-between'
+  color: red;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
 }
 
 .AddressDetails-credit-row {
-  color: 'green';
-  display: 'flex';
-  flex-direction: 'row';
-  justify-content: 'space-between'
+  color: green;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between
 }

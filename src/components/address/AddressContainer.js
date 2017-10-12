@@ -1,9 +1,9 @@
 import React, {Component, PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import update from 'immutability-helper';
-
 import openSocket from 'socket.io-client';
 
+import './styles/Address.css';
 import {DefaultButton} from '../common/Button';
 import AddressDetails from './AddressDetails';
 import SearchBar from '../common/SearchBar';
@@ -210,7 +210,7 @@ export default class AddressContainer extends Component {
 }
 
 AddressContainer.propTypes = {
-  config: PropTypes.object.required
+  config: PropTypes.object.isRequired
 };
 
 class AddressSearchContainer extends PureComponent {
@@ -240,7 +240,7 @@ const RecentTransactions = props => (
   !!props.transactions.length && (
     <div style={{fontSize: 10}}>
       {props.transactions.map(tx => (
-        <div style={{display: 'flex', flexDirection: 'column', margin: 5}}>
+        <div key={tx.txid} style={{display: 'flex', flexDirection: 'column', margin: 5}}>
           <div style={{display: 'flex', flex: 0.6}}>
             TRANSACTION ID: {tx.txid}
           </div>
@@ -254,7 +254,7 @@ const RecentTransactions = props => (
 );
 
 const UnknownAddress = props => (
-  <div className="UnknownAddress-message">
+  <div className="UnknownAddress">
     An error occurred please check the correct address was entered.
   </div>
 );
