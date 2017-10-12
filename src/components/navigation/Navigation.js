@@ -11,7 +11,12 @@ export default class Navigation extends Component {
     return (
       <div className="Navigation">
         <header className="Navigation-header">
-          <img src={bitcoinIcon} className="Navigation-logo" alt="logo" onClick={this.props.handleClick}/>
+          <img
+            src={bitcoinIcon}
+            className="Navigation-logo"
+            alt="logo"
+            onClick={this.props.handleClick}
+          />
           <h1 className="Navigation-title">
             bitAction.io
           </h1>
@@ -35,3 +40,6 @@ Navigation.contextTypes = {
   exchangePriceData: PropTypes.object
 };
 
+Navigation.propTypes = {
+  handleClick: PropTypes.func.isRequired
+};

@@ -21,6 +21,9 @@ export default class ExchangePriceData extends Component {
       .then(response => response.json())
       .then((result) => {
         this.setState({data: result});
+      })
+      .catch((error) => {
+        console.error('An error occurred fetching BTC pricing data', error);
       });
   }
 
