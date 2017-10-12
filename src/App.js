@@ -14,11 +14,13 @@ import Navigation from './components/navigation/Navigation';
 import Footer from './components/navigation/Footer';
 import history from './history';
 import {API_CONFIG} from './config';
+import ExchangePriceData from './components/common/ExchangePriceData';
 
 const App = () => (
   <div className="App">
-      <Navigation handleClick={() => history.push('/')} />
-      <div className="App-container">
+    <div className="App-container">
+      <ExchangePriceData>
+        <Navigation handleClick={() => history.push('/')} />
         <Router history={history}>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -35,8 +37,9 @@ const App = () => (
             <Route component={RouteNotFound} />
           </Switch>
         </Router>
-      </div>
-      <Footer />
+      </ExchangePriceData>
+    </div>
+    <Footer />
   </div>
 );
 

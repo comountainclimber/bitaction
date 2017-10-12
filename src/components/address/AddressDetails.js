@@ -5,7 +5,8 @@ import QRCode from 'qrcode.react';
 import './styles/Address.css';
 import {currencyFormatter} from '../../utils/utils';
 
-const AddressDetails = props => (
+const AddressDetails = (props, context) => (
+  console.log(props, context) ||
   <div className="Address-card">
     <div style={{marginBottom: 5, display: 'flex', flexDirection: 'column'}}>
       <b style={{flex: 1}}>ADDRESS:</b>
@@ -27,12 +28,16 @@ const AddressDetails = props => (
             key={transaction.txid}
             id={props.id}
             transaction={transaction}
-            btcValue={props.btcValue}
+            btcValue={context.exchangePriceData.price}
           />
       )))}
     </div>
   </div>
 );
+
+AddressDetails.contextTypes = {
+  exchangePriceData: PropTypes.object
+};
 
 const PendingTransactions = (props) => {
   const pending = [];

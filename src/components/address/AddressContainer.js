@@ -4,12 +4,12 @@ import update from 'immutability-helper';
 
 import openSocket from 'socket.io-client';
 
-
+import {DefaultButton} from '../common/Button'
 import AddressDetails from './AddressDetails';
 import SearchBar from '../common/SearchBar';
 import ContentContainer, {Busy} from '../common/ContentContainer';
 
-import ExchangePriceData from '../../ExchangePriceData';
+import ExchangePriceData from '../common/ExchangePriceData';
 
 
 export default class AddressContainer extends Component {
@@ -18,7 +18,9 @@ export default class AddressContainer extends Component {
     this.state = {
       searchValue: '',
       addresses: [],
+      recentTransactions: [],
       pendingTransactions: [],
+      recentTransactionsPaused: false
     };
     this.handleSearchForAddress = this.handleSearchForAddress.bind(this);
     this.handleUpdateSearchValue = this.handleUpdateSearchValue.bind(this);
@@ -33,6 +35,25 @@ export default class AddressContainer extends Component {
     });
 
     this.socket.on('tx', (data) => {
+      const reduced = {
+        txid: data.txid,
+        valueOut: data.valueOut
+      };
+      if (!this.state.recentTransactionsPaused) {
+        if (this.state.recentTransactions.length < 10) {
+          const transactions = update(this.state.recentTransactions, {
+            $unshift: [reduced]
+          });
+          this.setState({recentTransactions: transactions});
+        } else {
+          const sliced = this.state.recentTransactions.slice(0, this.state.recentTransactions.length-1);
+          //sliced.u(data);
+          const transactions = update(sliced, {
+            $unshift: [reduced]
+          });
+          this.setState({recentTransactions: transactions});
+        }
+      }
       this.state.addresses.forEach((address) => {
         data.vout.forEach((voutTransaction) => {
           if (Object.keys(voutTransaction)[0] === address.id) {
@@ -165,35 +186,49 @@ export default class AddressContainer extends Component {
     return (
       <div>
         <ContentContainer>
-          <ExchangePriceData>
-            { state =>
-              <div>
-                <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-                  <h1 style={{marginTop: 0, marginBottom: 15}}> {config.display} </h1>
-                  {this.state.busy &&
-                    <Busy style={{fontSize: 14, fontWeight: '300', marginLeft: 15}} />
+          <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+            <h1 style={{marginTop: 0, marginBottom: 15}}> {config.display} </h1>
+            {this.state.busy &&
+              <Busy style={{fontSize: 14, fontWeight: '300', marginLeft: 15}} />
+            }
+            {this.state.error && <UnknownAddress />}
+            {this.state.pendingConfirmationMessage &&
+              <Pending message={this.state.pendingConfirmationMessage} />
+            }
+          </div>
+          <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+            <div style={{flex: 0.45, display: 'flex'}} >
+              <AddressSearchContainer
+                handleUpdateSearchValue={this.handleUpdateSearchValue}
+                searchValue={this.state.searchValue}
+                handleSearch={this.handleSearchForAddress}
+              />
+            </div>
+            <div style={{flex: 0.45, display: 'flex', flexDirection: 'row', overflowY: 'auto'}}>
+              <div style={{maxHeight: 100, display: 'flex'}}>
+                <RecentTransactions transactions={this.state.recentTransactions}  />
+              </div>
+              {!!this.state.recentTransactions.length && (
+                <div>
+                  {!this.state.recentTransactionsPaused &&
+                    <DefaultButton text="||" additionalStyles={{width: 50}} onClick={() => this.setState({recentTransactionsPaused: true})} />
                   }
-                  {this.state.error && <UnknownAddress />}
-                  {this.state.pendingConfirmationMessage &&
-                    <Pending message={this.state.pendingConfirmationMessage} />
+                  {this.state.recentTransactionsPaused &&
+                    <DefaultButton text="▶" additionalStyles={{width: 50}} onClick={() => this.setState({recentTransactionsPaused: false})} />
                   }
                 </div>
-                <AddressSearchContainer
-                  handleUpdateSearchValue={this.handleUpdateSearchValue}
-                  searchValue={this.state.searchValue}
-                  handleSearch={this.handleSearchForAddress}
-                />
-                {addresses.map(
-                  address => (
-                    <AddressDetails
-                      btcValue={state.data.price}
-                      key={address.id}
-                      {...address}
-                    />
-                ))}
-              </div>
-          }
-          </ExchangePriceData>
+              )}
+            </div>
+          </div>
+          {addresses.map(
+            address => (
+              <AddressDetails
+                // btcValue={state.data.price}
+                key={address.id}
+                {...address}
+              />
+          ))}
+          {!addresses.length && <h3 style={{textAlign: 'center', marginTop: 50}}> Enter a public key to get started... </h3>}
         </ContentContainer>
       </div>
     );
@@ -203,7 +238,7 @@ export default class AddressContainer extends Component {
 class AddressSearchContainer extends PureComponent {
   render() {
     return (
-      <div style={{border: 'solid thin black', borderRadius: 5, padding: 15, maxWidth: 900}}>
+      <div style={{border: 'solid thin black', borderRadius: 5, padding: 15, width: '100%', height: 90}}>
         <div style={{marginBottom: 5}}>
           Enter address or multiple addresses seperated by commas:
         </div>
@@ -217,6 +252,23 @@ class AddressSearchContainer extends PureComponent {
     );
   }
 }
+
+const RecentTransactions = props => (
+  !!props.transactions.length && (
+    <div style={{fontSize: 10}}>
+      {props.transactions.map((tx) => (
+        <div style={{display: 'flex', flexDirection: 'column', margin: 5}}>
+          <div style={{display: 'flex', flex: .6}}>
+            TRANSACTION ID: {tx.txid}
+          </div>
+          <div style={{display: 'flex', flex: .4}}>
+            VALUE OUT: {tx.valueOut}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+);
 
 const UnknownAddress = props => (
   <div style={{fontSize: 14, fontWeight: '300', marginLeft: 15, color: '#F44336'}}>
