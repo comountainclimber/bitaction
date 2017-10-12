@@ -6,7 +6,7 @@ import './styles/Footer.css';
 
 const Footer = () => (
   <div className="Footer-container" style={{backgroundColor: colors.lightGrey}}>
-    <a href="https://github.com/comountainclimber/weedmaps_react_app" target="blank">
+    <a href="https://github.com/comountainclimber/bitaction" target="blank">
       <img src={octocat} className="Footer-social-icon" alt="octocat" />
     </a>
     <div style={{fontWeight: 100}}>
