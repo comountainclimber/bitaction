@@ -1,38 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-//   static childContextTypes = {
-//     form: PropTypes.shape({
-//       submit: PropTypes.func.isRequired
-//     }).isRequired
-//   }
-
-//   getChildContext() {
-//     return {
-//       form: {
-//         submit: () => {
-//           if (this.props.onSubmit)
-//             this.props.onSubmit()
-//         }
-//       }
-//     }
-//   }
-
-//   render() {
-//     return <div>{this.props.children}</div>
-//   }
-// }
-
-// class SubmitButton extends React.Component {
-//   static contextTypes = {
-//     form: PropTypes.shape({
-//       submit: PropTypes.func.isRequired
-//     }).isRequired
-//   }
-
-
-
-
 export default class ExchangePriceData extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +36,7 @@ export default class ExchangePriceData extends Component {
   }
 
   render() {
-    return <div>{ this.props.children }</div>
+    return <div>{this.props.children}</div>;
   }
 
 }
@@ -76,3 +44,8 @@ export default class ExchangePriceData extends Component {
 ExchangePriceData.childContextTypes = {
   exchangePriceData: PropTypes.object
 };
+
+ExchangePriceData.propTypes = {
+  children: PropTypes.node
+};
+

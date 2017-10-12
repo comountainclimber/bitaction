@@ -6,11 +6,10 @@ import './styles/Address.css';
 import {currencyFormatter} from '../../utils/utils';
 
 const AddressDetails = (props, context) => (
-  console.log(props, context) ||
   <div className="Address-card">
     <div style={{marginBottom: 5, display: 'flex', flexDirection: 'column'}}>
       <b style={{flex: 1}}>ADDRESS:</b>
-      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10, marginBottom: 10}}>
+      <div className="AddressDetails-qr-code-container">
         <div style={{marginBottom: 5}}>
           {props.id}
         </div>
@@ -34,7 +33,11 @@ const AddressDetails = (props, context) => (
     </div>
   </div>
 );
-
+AddressDetails.propTypes = {
+  id: PropTypes.string.isRequired,
+  pendingTransactions: PropTypes.array.isRequired,
+  result: PropTypes.object.isRequired
+};
 AddressDetails.contextTypes = {
   exchangePriceData: PropTypes.object
 };
@@ -46,7 +49,6 @@ const PendingTransactions = (props) => {
       pending.push(<a style={{fontSize: 10}}> {transaction.txid} </a>);
     }
   });
-
   return (
     <div>
       {!!pending.length &&
@@ -58,14 +60,20 @@ const PendingTransactions = (props) => {
     </div>
   );
 };
+PendingTransactions.propTypes = {
+  pendingTransactions: PropTypes.array.isRequired
+};
 
 const TransactionParser = (props) => {
   const transactionID = props.transaction.txid;
   const debits = [];
-  props.transaction.vin.map((transaction) => {
+  props.transaction.vin.forEach((transaction) => {
     if (transaction.addr === props.id) {
       debits.push(
-        <div key={transaction.txid} style={{color: 'red', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+        <div
+          key={transaction.txid}
+          className="AddressDetails-debit-row"
+        >
           <div style={{display: 'flex'}}>
             - {transaction.value}
           </div>
@@ -82,7 +90,7 @@ const TransactionParser = (props) => {
       credits.push(
         <div
           key={transaction.scriptPubKey.hex}
-          style={{color: 'green', display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}
+          className="AddressDetails-credit-row"
         >
           <div style={{display: 'flex'}}>
             + {transaction.value}
@@ -94,7 +102,6 @@ const TransactionParser = (props) => {
       );
     }
   });
-
   return (
     <div key={transactionID} style={{display: 'flex', flexDirection: 'column'}}>
       {debits}
@@ -103,6 +110,9 @@ const TransactionParser = (props) => {
     </div>
   );
 };
-
+TransactionParser.propTypes = {
+  transaction: PropTypes.object.isRequired,
+  btcValue: PropTypes.number
+};
 
 export default AddressDetails;

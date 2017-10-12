@@ -4,13 +4,10 @@ import update from 'immutability-helper';
 
 import openSocket from 'socket.io-client';
 
-import {DefaultButton} from '../common/Button'
+import {DefaultButton} from '../common/Button';
 import AddressDetails from './AddressDetails';
 import SearchBar from '../common/SearchBar';
 import ContentContainer, {Busy} from '../common/ContentContainer';
-
-import ExchangePriceData from '../common/ExchangePriceData';
-
 
 export default class AddressContainer extends Component {
   constructor(props) {
@@ -46,8 +43,8 @@ export default class AddressContainer extends Component {
           });
           this.setState({recentTransactions: transactions});
         } else {
-          const sliced = this.state.recentTransactions.slice(0, this.state.recentTransactions.length-1);
-          //sliced.u(data);
+          const sliced = this.state.recentTransactions
+            .slice(0, this.state.recentTransactions.length - 1);
           const transactions = update(sliced, {
             $unshift: [reduced]
           });
@@ -58,7 +55,7 @@ export default class AddressContainer extends Component {
         data.vout.forEach((voutTransaction) => {
           if (Object.keys(voutTransaction)[0] === address.id) {
             this.handleTempPendingTransactionMessage(
-              `Address ${address.id} has a incoming unconfirmed transaction.`
+              `Address ${address.id} has an incoming unconfirmed transaction.`
             );
             const filtered = this.state.addresses.filter(
               _address => _address.id !== address.id
@@ -79,39 +76,15 @@ export default class AddressContainer extends Component {
     });
 
     this.socket.on('block', (data) => {
-      //TODO: deal with this
-
-      //000000004e8d39cdf3cc35c4f325242f45d231ab88c4c2b662a13a36ab792c37
-
-      console.log('RECEIVED A BLOCK!', data)
-      // this.state.addresses.forEach((address) => {
-      //   data.tx.forEach((transaction) => {
-      //     // this means we have received a block with a transaction id tied to our local wallet
-      //     if (address.pendingTransactions.find(pendingTx => pendingTx.txid === transaction)) {
-      //       this.setState({busy: true});
-      //       fetch(`${this.props.config.dataSource}/txs/?address=${address.id}`)
-      //         .then(response => response.json())
-      //         .then((result) => {
-      //           const filtered = this.state.addresses.filter(
-      //             _address => _address.id !== address.id
-      //           );
-      //           const newAddressList = update(filtered, {
-      //             $push: [{id: address, result, pendingTransactions: []}]
-      //           });
-      //           this.setState({busy: false, addresses: newAddressList});
-      //         })
-      //         .catch((err) => {
-      //           this.setState({busy: false, error: true});
-      //           console.error(err);
-      //         });
-      //     }
-      //   });
-      // });
+      // TODO: deal with this
+      // 000000004e8d39cdf3cc35c4f325242f45d231ab88c4c2b662a13a36ab792c37
+      // 1.) remove pending transactions that have been confirmed on this block
+      // 2.) fetch the data assosciated with the wallet
     });
   }
 
   handleTempPendingTransactionMessage(message) {
-    this.setState({pendingConfirmationMessage: message})
+    this.setState({pendingConfirmationMessage: message});
     setTimeout(() => this.setState({pendingConfirmationMessage: ''}), 10000);
   }
 
@@ -123,13 +96,7 @@ export default class AddressContainer extends Component {
     this.setState({busy: true});
     const address = this.state.searchValue;
     const split = address.split(',');
-
-
     if (split.length) {
-      // // console.log('seperated by commas!')
-      // const requests = split.map((address) => {
-      //   return fetch(`${this.props.config.dataSource}/txs/?address=${address}`)
-      // })
       return Promise.all(split.map((splitAddress) => {
         const addressWithoutWhiteSpace = splitAddress.trim();
         return new Promise((resolve, reject) => {
@@ -138,18 +105,11 @@ export default class AddressContainer extends Component {
             .then((result) => {
               const mapped = {id: addressWithoutWhiteSpace, pendingTransactions: [], result};
               return resolve(mapped);
-              // const newAddressList = update(this.state.addresses, {
-              //   $push: [{id: address, pendingTransactions: [], result}]
-              // });
-              // this.setState({busy: false, addresses: newAddressList});
             })
-            .catch((err) => {
-              return reject(err);
-            });
+            .catch(err => reject(err));
         });
       }))
         .then((results) => {
-          console.log('found em ', results);
           const newAddressList = update(this.state.addresses, {
             $push: [...results]
           });
@@ -159,9 +119,8 @@ export default class AddressContainer extends Component {
           console.error(err);
           this.setState({busy: false, error: true});
         });
-    } else {
-    // TODO: parse the comma seperated list if it exists
-      fetch(`${this.props.config.dataSource}/txs/?address=${address}`)
+    } else if (!split.length) {
+      return fetch(`${this.props.config.dataSource}/txs/?address=${address}`)
         .then(response => response.json())
         .then((result) => {
           const newAddressList = update(this.state.addresses, {
@@ -177,7 +136,7 @@ export default class AddressContainer extends Component {
   }
 
   handleUpdateSearchValue(value) {
-    return this.setState({searchValue: value, error: false})
+    return this.setState({searchValue: value, error: false});
   }
 
   render() {
@@ -206,15 +165,27 @@ export default class AddressContainer extends Component {
             </div>
             <div style={{flex: 0.45, display: 'flex', flexDirection: 'row', overflowY: 'auto'}}>
               <div style={{maxHeight: 100, display: 'flex'}}>
-                <RecentTransactions transactions={this.state.recentTransactions}  />
+                <RecentTransactions transactions={this.state.recentTransactions} />
               </div>
               {!!this.state.recentTransactions.length && (
                 <div>
                   {!this.state.recentTransactionsPaused &&
-                    <DefaultButton text="||" additionalStyles={{width: 50}} onClick={() => this.setState({recentTransactionsPaused: true})} />
+                    <DefaultButton
+                      text="||"
+                      additionalStyles={{width: 50}}
+                      onClick={() =>
+                        this.setState({recentTransactionsPaused: true})
+                      }
+                    />
                   }
                   {this.state.recentTransactionsPaused &&
-                    <DefaultButton text="▶" additionalStyles={{width: 50}} onClick={() => this.setState({recentTransactionsPaused: false})} />
+                    <DefaultButton
+                      text="▶"
+                      additionalStyles={{width: 50}}
+                      onClick={() =>
+                        this.setState({recentTransactionsPaused: false})
+                      }
+                    />
                   }
                 </div>
               )}
@@ -223,22 +194,29 @@ export default class AddressContainer extends Component {
           {addresses.map(
             address => (
               <AddressDetails
-                // btcValue={state.data.price}
                 key={address.id}
                 {...address}
               />
           ))}
-          {!addresses.length && <h3 style={{textAlign: 'center', marginTop: 50}}> Enter a public key to get started... </h3>}
+          {!addresses.length &&
+            <h3 style={{textAlign: 'center', marginTop: 50}}>
+              Enter a public key to get started...
+            </h3>
+          }
         </ContentContainer>
       </div>
     );
   }
 }
 
+AddressContainer.propTypes = {
+  config: PropTypes.object.required
+};
+
 class AddressSearchContainer extends PureComponent {
   render() {
     return (
-      <div style={{border: 'solid thin black', borderRadius: 5, padding: 15, width: '100%', height: 90}}>
+      <div className="AddressSearchContainer-container">
         <div style={{marginBottom: 5}}>
           Enter address or multiple addresses seperated by commas:
         </div>
@@ -252,16 +230,21 @@ class AddressSearchContainer extends PureComponent {
     );
   }
 }
+AddressSearchContainer.propTypes = {
+  handleUpdateSearchValue: PropTypes.func.isRequired,
+  searchValue: PropTypes.string.isRequired,
+  handleSearch: PropTypes.func.isRequired
+};
 
 const RecentTransactions = props => (
   !!props.transactions.length && (
     <div style={{fontSize: 10}}>
-      {props.transactions.map((tx) => (
+      {props.transactions.map(tx => (
         <div style={{display: 'flex', flexDirection: 'column', margin: 5}}>
-          <div style={{display: 'flex', flex: .6}}>
+          <div style={{display: 'flex', flex: 0.6}}>
             TRANSACTION ID: {tx.txid}
           </div>
-          <div style={{display: 'flex', flex: .4}}>
+          <div style={{display: 'flex', flex: 0.4}}>
             VALUE OUT: {tx.valueOut}
           </div>
         </div>
@@ -271,14 +254,16 @@ const RecentTransactions = props => (
 );
 
 const UnknownAddress = props => (
-  <div style={{fontSize: 14, fontWeight: '300', marginLeft: 15, color: '#F44336'}}>
+  <div className="UnknownAddress-message">
     An error occurred please check the correct address was entered.
   </div>
 );
 
 const Pending = props => (
-  <div style={{fontSize: 14, fontWeight: '300', marginLeft: 15, color: 'green'}}>
+  <div className="Pending-message">
     {props.message}
   </div>
 );
-
+Pending.propTypes = {
+  message: PropTypes.string.isRequired
+};
