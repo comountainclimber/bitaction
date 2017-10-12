@@ -49,7 +49,7 @@ export default class ExchangePriceData extends Component {
   }
 
   fetchBitcoinPriceData() {
-    fetch('http://coincap.io/page/BTC')
+    fetch('https://coincap.io/page/BTC')
       .then(response => response.json())
       .then((result) => {
         this.setState({data: result});
